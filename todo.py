@@ -1,4 +1,5 @@
 """Import dependencies"""
+from typing import Any
 from fastapi import APIRouter, Path
 from model import Todo
 
@@ -10,14 +11,15 @@ todo_list = []
 @todo_router.post("/todo", tags=["Todos"])
 async def add_todo(todo: Todo) -> dict:
     """Add todo to data bases"""
+    todo.id = len(todo_list) + 1
     todo_list.append(todo)
     return {"message": "Todo added seccessfully"}
 
 
-@todo_router.get("/todo", tags=["Todos"])
-async def retrieve_todos() -> dict:
+@todo_router.get("/todo", response_model=list[Todo], tags=["Todos"])
+async def retrieve_todos() -> Any:
     """List todos from data bases"""
-    return {"todos": todo_list}
+    return todo_list
 
 
 @todo_router.get("/todo/{todo_id}", tags=["Todos"])

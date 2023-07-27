@@ -12,5 +12,5 @@ class Item(BaseModel):
 class Todo(BaseModel):
     """Todo pydantic model"""
 
-    id: int
-    item: Item
+    id: int = None
+    item: Item = None

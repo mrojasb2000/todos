@@ -8,7 +8,7 @@ todo_router = APIRouter()
 todo_list = []
 
 
-@todo_router.post("/todo", tags=["Todos"])
+@todo_router.post("/todo", status_code=201, tags=["Todos"])
 async def add_todo(todo: Todo) -> dict:
     """Add todo to data bases"""
     todo.id = len(todo_list) + 1

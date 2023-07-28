@@ -1,6 +1,6 @@
 """Import dependencies"""
 from typing import Any
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, Path, HTTPException, status
 from model import Todo
 
 todo_router = APIRouter()
@@ -28,7 +28,7 @@ async def filter_by_id(todo_id: int = Path(ge=0, le=100)) -> dict:
     for todo in todo_list:
         if todo.id == todo_id:
             return {"todo": todo}
-    return {"message": "Todo with supplied ID doesn't exist."}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo with supplied ID doesn't exist.")
 
 
 @todo_router.put("/todo/{todo_id}", tags=["Todos"])
@@ -38,7 +38,7 @@ async def update_todo(todo_data: Todo, todo_id: int) -> dict:
         if todo.id == todo_id:
             todo.item = todo_data.item
             return {"message": "Todo updated successfully"}
-    return {"message": "Todo with supplied ID doesn't exist."}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo with supplied ID doesn't exist.")
 
 
 @todo_router.delete("/todo/{todo_id}", tags=["Todos"])
@@ -49,7 +49,7 @@ async def remove_todo(todo_id: int) -> dict:
         if todo.id == todo_id:
             todo_list.pop(index)
             return {"message": "Todo deleted successfully"}
-    return {"message": "Todo with supplied ID doesn't exist."}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo with supplied ID doesn't exist.")
 
 
 @todo_router.delete("/todo")
